@@ -36,17 +36,19 @@ def weather():
 
     # Weather API URL
     url = f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current=temperature_2m"
+    try:
+        response = requests.get(url)
+        data = response.json()
 
-    # API Call
-    response = requests.get(url)
-    data = response.json()
+    except Exception as e:
+        return jsonify({
+            "error": "Unable to fetch weather data"
+        }), 500
 
-    # Response
     return jsonify({
         "city": city,
         "temperature": data["current"]["temperature_2m"]
     })
-
 if __name__ == "__main__":
     app.run(debug=True)
     
